@@ -320,75 +320,55 @@
 
     function showGameOver(reason) {
       const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+      modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
       
-      let title, message, emoji;
+      let title, message, emoji, lessonTitle, lessonText;
       if (reason === 'win') {
-        title = '🎉 ยินดีด้วย! คุณชนะแล้ว!';
-        message = 'คุณอยู่รอดได้ 10 วัน และเรียนรู้หลักเศรษฐศาสตร์เป็นอย่างดี!';
+        title = '🎉 ยินดีด้วย!';
+        message = 'คุณอยู่รอดได้ 10 วัน!';
         emoji = '🏆';
+        lessonTitle = '💡 หลักการเศรษฐศาสตร์ที่ได้เรียนรู้';
+        lessonText = '<strong>กำไรส่วนเกิน (Profit Margin):</strong> คุณเข้าใจว่าการซื้อในราคาต่ำและขายในราคาสูงสร้างกำไร<br><br><strong>การบริหารสินค้าคงคลัง:</strong> การเก็บสินค้าไว้เยอะเกินไปอาจทำให้เงินทุนติดค้าง ต้องขายให้ทันเวลา<br><br><strong>ชื่อเสียงและความน่าเชื่อถือ:</strong> การทำกำไรที่ดีช่วยสร้างชื่อเสียงให้ธุรกิจ';
       } else if (reason === 'lose') {
-        title = '💔 เกมจบ - ล้มละลาย';
-        message = 'คุณไม่มีเงินและสินค้าเหลือแล้ว ลองใหม่อีกครั้ง!';
+        title = '💔 เกมจบ';
+        message = 'คุณไม่มีเงินและสินค้าเหลือแล้ว';
         emoji = '😢';
+        lessonTitle = '📚 บทเรียนเศรษฐศาสตร์';
+        lessonText = '<strong>สภาพคล่องทางการเงิน (Liquidity):</strong> ธุรกิจต้องมีเงินสดหมุนเวียนเพียงพอ การใช้เงินหมดโดยไม่มีสินค้าที่ขายได้ทำให้ล้มละลาย<br><br><strong>ต้นทุนค่าเสียโอกาส:</strong> การซื้อสินค้าผิดเวลาหรือผิดราคาทำให้พลาดโอกาสทำกำไร<br><br><strong>การจัดการความเสี่ยง:</strong> อย่าลงทุนเงินทั้งหมดในครั้งเดียว ควรกระจายความเสี่ยง';
       } else {
-        title = '⭐ เกมจบ - ชื่อเสียงหมด';
-        message = 'ชื่อเสียงของคุณลดลงจนหมด ร้านค้าต้องปิดตัว!';
+        title = '⭐ เกมจบ';
+        message = 'ร้านค้าต้องปิดตัว!';
         emoji = '📉';
+        lessonTitle = '📚 บทเรียนเศรษฐศาสตร์';
+        lessonText = '<strong>มูลค่าของชื่อเสียง (Brand Value):</strong> ชื่อเสียงคือสินทรัพย์ที่มองไม่เห็นแต่มีค่ามาก การสูญเสียความเชื่อมั่นจากลูกค้าทำให้ธุรกิจล้มเหลว<br><br><strong>ความพึงพอใจของลูกค้า:</strong> การเก็บสินค้าคงคลังมากเกินไปแสดงถึงการไม่ตอบสนองความต้องการตลาด<br><br><strong>การปรับตัว:</strong> ต้องติดตามสถานการณ์ตลาดและปรับกลยุทธ์อย่างต่อเนื่อง';
       }
       
       modal.innerHTML = `
-        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 slide-in shadow-2xl">
+        <div class="bg-white rounded-2xl p-4 max-w-sm w-full slide-in shadow-2xl">
           <div class="text-center">
-            <div class="text-6xl mb-4">${emoji}</div>
-            <h2 class="text-3xl font-bold mb-4 text-gray-800">${title}</h2>
-            <p class="text-lg text-gray-600 mb-6">${message}</p>
+            <div class="text-5xl mb-2">${emoji}</div>
+            <h2 class="text-xl font-bold mb-2 text-gray-800">${title}</h2>
+            <p class="text-sm text-gray-600 mb-3">${message}</p>
             
-            <div class="bg-purple-50 rounded-lg p-6 mb-6">
-              <h3 class="text-xl font-bold text-purple-700 mb-4">📊 สถิติของคุณ</h3>
-              <div class="grid grid-cols-2 gap-4 text-left">
-                <div>
-                  <div class="text-sm text-gray-600">เงินสุดท้าย</div>
-                  <div class="text-xl font-bold text-green-600">฿${gameState.cash}</div>
+            <div class="bg-purple-50 rounded-lg p-2 mb-2">
+              <div class="grid grid-cols-2 gap-2 text-sm">
+                <div class="text-center">
+                  <div class="text-xs text-gray-600">เงิน</div>
+                  <div class="text-base font-bold text-green-600">฿${gameState.cash}</div>
                 </div>
-                <div>
-                  <div class="text-sm text-gray-600">กำไรรวม</div>
-                  <div class="text-xl font-bold text-blue-600">฿${gameState.totalProfit}</div>
-                </div>
-                <div>
-                  <div class="text-sm text-gray-600">ชื่อเสียง</div>
-                  <div class="text-xl font-bold text-yellow-600">${gameState.reputation}</div>
-                </div>
-                <div>
-                  <div class="text-sm text-gray-600">จำนวนวัน</div>
-                  <div class="text-xl font-bold text-purple-600">${gameState.day}</div>
+                <div class="text-center">
+                  <div class="text-xs text-gray-600">กำไร</div>
+                  <div class="text-base font-bold text-blue-600">฿${gameState.totalProfit}</div>
                 </div>
               </div>
             </div>
             
-            <div class="bg-blue-50 rounded-lg p-6 mb-6 text-left">
-              <h3 class="text-lg font-bold text-blue-800 mb-3">💡 ความรู้ทางเศรษฐศาสตร์</h3>
-              <div class="space-y-3 text-sm text-gray-700">
-                <div>
-                  <span class="font-bold text-blue-700">📈 อุปสงค์และอุปทาน:</span> 
-                  ราคาสินค้าในตลาดเปลี่ยนแปลงตามสภาวะตลาด เมื่อความต้องการสูง ราคาก็สูงขึ้น
-                </div>
-                <div>
-                  <span class="font-bold text-green-700">💰 กำไร:</span> 
-                  กำไร = ราคาขาย - ราคาทุน การซื้อในราคาต่ำและขายในราคาสูงคือหลักการพื้นฐาน
-                </div>
-                <div>
-                  <span class="font-bold text-yellow-700">⭐ การบริหารสินค้าคงเหลือ:</span> 
-                  การเก็บสินค้ามากเกินไปอาจทำให้เสียชื่อเสียง ควรขายให้ทันก่อนราคาตก
-                </div>
-                <div>
-                  <span class="font-bold text-purple-700">🎯 กลยุทธ์ทางธุรกิจ:</span> 
-                  สังเกตแนวโน้มราคาและตัดสินใจอย่างรอบคอบ อย่าใช้เงินหมดทันที เก็บไว้บ้างเพื่อโอกาสที่ดีกว่า
-                </div>
-              </div>
+            <div class="bg-blue-50 rounded-lg p-3 mb-3 text-left border-2 border-blue-200">
+              <div class="text-sm font-bold text-blue-800 mb-2">${lessonTitle}</div>
+              <div class="text-xs text-gray-700 leading-relaxed">${lessonText}</div>
             </div>
             
-            <button id="restart-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors w-full">
+            <button id="restart-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg text-base transition-colors w-full shadow-lg">
               🔄 เริ่มเกมใหม่
             </button>
           </div>
@@ -616,5 +596,5 @@
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a8b732bf36252ea',t:'MTc2NDg1Mjg0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a8bac69713c62dc',t:'MTc2NDg1NTE4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
